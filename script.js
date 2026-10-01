@@ -255,40 +255,7 @@ overlayVideo.addEventListener("pointercancel", function () {
 // FULL SCREEN OUTPUT
 // ================================
 
-const fullscreenBtn = document.getElementById("fullscreenBtn");
 
-fullscreenBtn.addEventListener("click", async function () {
-
-  const preview = document.querySelector(".preview");
-
-  try {
-
-    if (!document.fullscreenElement) {
-
-      await preview.requestFullscreen();
-
-      fullscreenBtn.textContent =
-        "❌ Keluar Full Screen";
-
-    } else {
-
-      await document.exitFullscreen();
-
-      fullscreenBtn.textContent =
-        "🖥️ Full Screen Output";
-
-    }
-
-  } catch (error) {
-
-    console.error(error);
-
-    statusText.textContent =
-      "Status: Full screen tidak didukung browser";
-
-  }
-
-});
 
 
 // Jika keluar full screen menggunakan tombol browser
@@ -299,6 +266,57 @@ document.addEventListener("fullscreenchange", function () {
 
     fullscreenBtn.textContent =
       "🖥️ Full Screen Output";
+
+  }
+
+});
+
+
+// ================================
+// FULL SCREEN OUTPUT
+// ================================
+
+const fullscreenBtn =
+  document.getElementById("fullscreenBtn");
+
+fullscreenBtn.addEventListener("click", async function () {
+
+  const preview =
+    document.querySelector(".preview");
+
+  try {
+
+    if (document.fullscreenElement) {
+
+      await document.exitFullscreen();
+
+      fullscreenBtn.textContent =
+        "🖥️ Full Screen Output";
+
+    } else {
+
+      await preview.requestFullscreen();
+
+      fullscreenBtn.textContent =
+        "❌ Keluar Full Screen";
+
+    }
+
+  } catch (error) {
+
+    console.log(error);
+
+    // Alternatif untuk HP yang tidak mendukung
+    preview.style.position = "fixed";
+    preview.style.top = "0";
+    preview.style.left = "0";
+    preview.style.width = "100vw";
+    preview.style.height = "100vh";
+    preview.style.zIndex = "99999";
+    preview.style.borderRadius = "0";
+
+    fullscreenBtn.textContent =
+      "❌ Keluar Full Screen";
 
   }
 
