@@ -23,6 +23,7 @@ h2 {
   overflow: hidden;
   background: #000;
   border-radius: 15px;
+  touch-action: none;
 }
 
 #camera {
@@ -34,11 +35,20 @@ h2 {
 #overlayVideo {
   position: absolute;
   width: 45%;
-  right: 10px;
-  bottom: 10px;
+  max-width: none;
+  right: auto;
+  bottom: auto;
+  left: 50%;
+  top: 50%;
   border-radius: 10px;
   z-index: 5;
-  transition: all 0.2s ease;
+
+  transform: translate(-50%, -50%);
+
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: move;
 }
 
 .hidden {
