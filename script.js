@@ -281,35 +281,49 @@ overlayVideo.addEventListener("pointercancel", function () {
 
 
 // ================================
-// FULL SCREEN
+// FULL SCREEN MODE
 // ================================
+
+const fullscreenBtn =
+  document.getElementById("fullscreenBtn");
+
+const preview =
+  document.querySelector(".preview");
+
+let fullScreenMode = false;
 
 if (fullscreenBtn) {
 
   fullscreenBtn.addEventListener("click", function () {
 
-    const preview =
-      document.querySelector(".preview");
+    fullScreenMode = !fullScreenMode;
 
-    if (!preview) return;
+    if (fullScreenMode) {
 
-    if (!document.fullscreenElement) {
-
-      if (preview.requestFullscreen) {
-
-        preview.requestFullscreen();
-
-      } else if (preview.webkitRequestFullscreen) {
-
-        preview.webkitRequestFullscreen();
-
-      }
+      preview.classList.add("fake-fullscreen");
 
       fullscreenBtn.textContent =
         "❌ Keluar Full Screen";
 
+      document.body.classList.add(
+        "output-fullscreen"
+      );
+
     } else {
 
-      if (document.exitFullscreen) {
+      preview.classList.remove(
+        "fake-fullscreen"
+      );
 
-        document
+      fullscreenBtn.textContent =
+        "🖥️ Full Screen Output";
+
+      document.body.classList.remove(
+        "output-fullscreen"
+      );
+
+    }
+
+  });
+
+}
