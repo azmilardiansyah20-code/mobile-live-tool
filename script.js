@@ -17,13 +17,12 @@ const moveRight = document.getElementById("moveRight");
 const sizeUp = document.getElementById("sizeUp");
 const sizeDown = document.getElementById("sizeDown");
 
+const fullscreenBtn = document.getElementById("fullscreenBtn");
+
 let cameraStream = null;
 
-// Posisi overlay
 let posX = 0;
 let posY = 0;
-
-// Ukuran overlay
 let overlayWidth = 45;
 
 
@@ -60,16 +59,14 @@ cameraBtn.addEventListener("click", async function () {
 
 
 // ================================
-// PILIH VIDEO GALERI
+// VIDEO GALERI
 // ================================
 
 videoInput.addEventListener("change", function () {
 
   const file = videoInput.files[0];
 
-  if (!file) {
-    return;
-  }
+  if (!file) return;
 
   const videoURL = URL.createObjectURL(file);
 
@@ -86,31 +83,41 @@ videoInput.addEventListener("change", function () {
 
 
 // ================================
-// TAMPILKAN / SEMBUNYIKAN
+// TAMPILKAN OVERLAY
 // ================================
 
 showOverlay.addEventListener("click", function () {
 
   if (!overlayVideo.src) {
+
     alert("Pilih video dari galeri terlebih dahulu.");
+
     return;
+
   }
 
   overlayVideo.classList.remove("hidden");
+
   overlayVideo.play();
 
 });
 
+
+// ================================
+// SEMBUNYIKAN OVERLAY
+// ================================
+
 hideOverlay.addEventListener("click", function () {
 
   overlayVideo.pause();
+
   overlayVideo.classList.add("hidden");
 
 });
 
 
 // ================================
-// UPDATE POSISI
+// POSISI OVERLAY
 // ================================
 
 function updatePosition() {
@@ -129,32 +136,47 @@ function updatePosition() {
 
 
 // ================================
-// GESER DENGAN TOMBOL
+// TOMBOL GESER
 // ================================
 
 moveUp.addEventListener("click", function () {
+
   posY -= 10;
+
   updatePosition();
+
 });
+
 
 moveDown.addEventListener("click", function () {
+
   posY += 10;
+
   updatePosition();
+
 });
+
 
 moveLeft.addEventListener("click", function () {
+
   posX -= 10;
+
   updatePosition();
+
 });
 
+
 moveRight.addEventListener("click", function () {
+
   posX += 10;
+
   updatePosition();
+
 });
 
 
 // ================================
-// UKURAN
+// RESIZE
 // ================================
 
 function updateSize() {
@@ -163,6 +185,7 @@ function updateSize() {
     overlayWidth + "%";
 
 }
+
 
 sizeUp.addEventListener("click", function () {
 
@@ -175,6 +198,7 @@ sizeUp.addEventListener("click", function () {
   }
 
 });
+
 
 sizeDown.addEventListener("click", function () {
 
@@ -190,7 +214,7 @@ sizeDown.addEventListener("click", function () {
 
 
 // ================================
-// DRAG DENGAN JARI / MOUSE
+// DRAG DENGAN JARI
 // ================================
 
 let dragging = false;
@@ -206,13 +230,13 @@ overlayVideo.addEventListener("pointerdown", function (event) {
 
   dragging = true;
 
-  overlayVideo.setPointerCapture(event.pointerId);
-
   startX = event.clientX;
   startY = event.clientY;
 
   startPosX = posX;
   startPosY = posY;
+
+  overlayVideo.setPointerCapture(event.pointerId);
 
   event.preventDefault();
 
@@ -221,15 +245,19 @@ overlayVideo.addEventListener("pointerdown", function (event) {
 
 overlayVideo.addEventListener("pointermove", function (event) {
 
-  if (!dragging) {
-    return;
-  }
+  if (!dragging) return;
 
-  const deltaX = event.clientX - startX;
-  const deltaY = event.clientY - startY;
+  const deltaX =
+    event.clientX - startX;
 
-  posX = startPosX + deltaX;
-  posY = startPosY + deltaY;
+  const deltaY =
+    event.clientY - startY;
+
+  posX =
+    startPosX + deltaX;
+
+  posY =
+    startPosY + deltaY;
 
   updatePosition();
 
@@ -251,73 +279,37 @@ overlayVideo.addEventListener("pointercancel", function () {
 
 });
 
-// ================================
-// FULL SCREEN OUTPUT
-// ================================
-
-
-
-
-// Jika keluar full screen menggunakan tombol browser
-
-document.addEventListener("fullscreenchange", function () {
-
-  if (!document.fullscreenElement) {
-
-    fullscreenBtn.textContent =
-      "🖥️ Full Screen Output";
-
-  }
-
-});
-
 
 // ================================
-// FULL SCREEN OUTPUT
+// FULL SCREEN
 // ================================
 
-const fullscreenBtn =
-  document.getElementById("fullscreenBtn");
+if (fullscreenBtn) {
 
-fullscreenBtn.addEventListener("click", async function () {
+  fullscreenBtn.addEventListener("click", function () {
 
-  const preview =
-    document.querySelector(".preview");
+    const preview =
+      document.querySelector(".preview");
 
-  try {
+    if (!preview) return;
 
-    if (document.fullscreenElement) {
+    if (!document.fullscreenElement) {
 
-      await document.exitFullscreen();
+      if (preview.requestFullscreen) {
 
-      fullscreenBtn.textContent =
-        "🖥️ Full Screen Output";
+        preview.requestFullscreen();
 
-    } else {
+      } else if (preview.webkitRequestFullscreen) {
 
-      await preview.requestFullscreen();
+        preview.webkitRequestFullscreen();
+
+      }
 
       fullscreenBtn.textContent =
         "❌ Keluar Full Screen";
 
-    }
+    } else {
 
-  } catch (error) {
+      if (document.exitFullscreen) {
 
-    console.log(error);
-
-    // Alternatif untuk HP yang tidak mendukung
-    preview.style.position = "fixed";
-    preview.style.top = "0";
-    preview.style.left = "0";
-    preview.style.width = "100vw";
-    preview.style.height = "100vh";
-    preview.style.zIndex = "99999";
-    preview.style.borderRadius = "0";
-
-    fullscreenBtn.textContent =
-      "❌ Keluar Full Screen";
-
-  }
-
-});
+        document
