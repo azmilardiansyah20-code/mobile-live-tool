@@ -38,6 +38,7 @@ h2 {
   bottom: 10px;
   border-radius: 10px;
   z-index: 5;
+  transition: all 0.2s ease;
 }
 
 .hidden {
@@ -71,6 +72,45 @@ button,
 
 input[type="file"] {
   display: none;
+}
+
+.overlayControls {
+  margin-top: 10px;
+  padding: 15px;
+  background: #222;
+  border-radius: 12px;
+}
+
+.overlayControls h3 {
+  margin-top: 0;
+  font-size: 17px;
+}
+
+.moveButtons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.moveButtons button {
+  width: 65px;
+  padding: 12px;
+}
+
+.moveButtons div {
+  display: flex;
+  gap: 5px;
+}
+
+.sizeButtons {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.sizeButtons button {
+  flex: 1;
 }
 
 #status {
