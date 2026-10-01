@@ -9,7 +9,6 @@ const hideOverlay = document.getElementById("hideOverlay");
 
 const statusText = document.getElementById("status");
 
-// Tombol kontrol
 const moveUp = document.getElementById("moveUp");
 const moveDown = document.getElementById("moveDown");
 const moveLeft = document.getElementById("moveLeft");
@@ -24,7 +23,7 @@ let cameraStream = null;
 let posX = 0;
 let posY = 0;
 
-// Ukuran overlay dalam persen
+// Ukuran overlay
 let overlayWidth = 45;
 
 
@@ -87,34 +86,24 @@ videoInput.addEventListener("change", function () {
 
 
 // ================================
-// TAMPILKAN VIDEO
+// TAMPILKAN / SEMBUNYIKAN
 // ================================
 
 showOverlay.addEventListener("click", function () {
 
   if (!overlayVideo.src) {
-
     alert("Pilih video dari galeri terlebih dahulu.");
-
     return;
-
   }
 
   overlayVideo.classList.remove("hidden");
-
   overlayVideo.play();
 
 });
 
-
-// ================================
-// SEMBUNYIKAN VIDEO
-// ================================
-
 hideOverlay.addEventListener("click", function () {
 
   overlayVideo.pause();
-
   overlayVideo.classList.add("hidden");
 
 });
@@ -126,76 +115,74 @@ hideOverlay.addEventListener("click", function () {
 
 function updatePosition() {
 
+  overlayVideo.style.left = "50%";
+  overlayVideo.style.top = "50%";
+
   overlayVideo.style.transform =
-    "translate(" + posX + "px, " + posY + "px)";
+    "translate(calc(-50% + " +
+    posX +
+    "px), calc(-50% + " +
+    posY +
+    "px))";
 
 }
 
 
 // ================================
-// GESER KE ATAS
+// GESER DENGAN TOMBOL
 // ================================
 
 moveUp.addEventListener("click", function () {
-
-  posY = posY - 10;
-
+  posY -= 10;
   updatePosition();
-
 });
-
-
-// ================================
-// GESER KE BAWAH
-// ================================
 
 moveDown.addEventListener("click", function () {
-
-  posY = posY + 10;
-
+  posY += 10;
   updatePosition();
-
 });
-
-
-// ================================
-// GESER KE KIRI
-// ================================
 
 moveLeft.addEventListener("click", function () {
-
-  posX = posX - 10;
-
+  posX -= 10;
   updatePosition();
-
 });
-
-
-// ================================
-// GESER KE KANAN
-// ================================
 
 moveRight.addEventListener("click", function () {
-
-  posX = posX + 10;
-
+  posX += 10;
   updatePosition();
-
 });
 
 
 // ================================
-// PERBESAR
+// UKURAN
 // ================================
+
+function updateSize() {
+
+  overlayVideo.style.width =
+    overlayWidth + "%";
+
+}
 
 sizeUp.addEventListener("click", function () {
 
-  if (overlayWidth < 90) {
+  if (overlayWidth < 100) {
 
-    overlayWidth = overlayWidth + 5;
+    overlayWidth += 5;
 
-    overlayVideo.style.width =
-      overlayWidth + "%";
+    updateSize();
+
+  }
+
+});
+
+sizeDown.addEventListener("click", function () {
+
+  if (overlayWidth > 10) {
+
+    overlayWidth -= 5;
+
+    updateSize();
 
   }
 
@@ -203,18 +190,63 @@ sizeUp.addEventListener("click", function () {
 
 
 // ================================
-// PERKECIL
+// DRAG DENGAN JARI / MOUSE
 // ================================
 
-sizeDown.addEventListener("click", function () {
+let dragging = false;
 
-  if (overlayWidth > 15) {
+let startX = 0;
+let startY = 0;
 
-    overlayWidth = overlayWidth - 5;
+let startPosX = 0;
+let startPosY = 0;
 
-    overlayVideo.style.width =
-      overlayWidth + "%";
 
+overlayVideo.addEventListener("pointerdown", function (event) {
+
+  dragging = true;
+
+  overlayVideo.setPointerCapture(event.pointerId);
+
+  startX = event.clientX;
+  startY = event.clientY;
+
+  startPosX = posX;
+  startPosY = posY;
+
+  event.preventDefault();
+
+});
+
+
+overlayVideo.addEventListener("pointermove", function (event) {
+
+  if (!dragging) {
+    return;
   }
+
+  const deltaX = event.clientX - startX;
+  const deltaY = event.clientY - startY;
+
+  posX = startPosX + deltaX;
+  posY = startPosY + deltaY;
+
+  updatePosition();
+
+  event.preventDefault();
+
+});
+
+
+overlayVideo.addEventListener("pointerup", function () {
+
+  dragging = false;
+
+});
+
+
+overlayVideo.addEventListener("pointercancel", function () {
+
+  dragging = false;
 
 });
