@@ -250,3 +250,56 @@ overlayVideo.addEventListener("pointercancel", function () {
   dragging = false;
 
 });
+
+// ================================
+// FULL SCREEN OUTPUT
+// ================================
+
+const fullscreenBtn = document.getElementById("fullscreenBtn");
+
+fullscreenBtn.addEventListener("click", async function () {
+
+  const preview = document.querySelector(".preview");
+
+  try {
+
+    if (!document.fullscreenElement) {
+
+      await preview.requestFullscreen();
+
+      fullscreenBtn.textContent =
+        "❌ Keluar Full Screen";
+
+    } else {
+
+      await document.exitFullscreen();
+
+      fullscreenBtn.textContent =
+        "🖥️ Full Screen Output";
+
+    }
+
+  } catch (error) {
+
+    console.error(error);
+
+    statusText.textContent =
+      "Status: Full screen tidak didukung browser";
+
+  }
+
+});
+
+
+// Jika keluar full screen menggunakan tombol browser
+
+document.addEventListener("fullscreenchange", function () {
+
+  if (!document.fullscreenElement) {
+
+    fullscreenBtn.textContent =
+      "🖥️ Full Screen Output";
+
+  }
+
+});
