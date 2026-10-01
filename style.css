@@ -127,3 +127,10 @@ input[type="file"] {
   color: #aaa;
   font-size: 14px;
 }
+
+.preview:fullscreen {
+  width: 100vw;
+  height: 100vh;
+  border-radius: 0;
+  background: #000;
+}
