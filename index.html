@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mobile Live Tool</title>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <h2>📱 Mobile Live Tool</h2>
+
+  <div class="preview">
+
+    <video
+      id="camera"
+      autoplay
+      playsinline
+      muted>
+    </video>
+
+    <video
+      id="overlayVideo"
+      playsinline
+      loop
+      controls
+      class="hidden">
+    </video>
+
+  </div>
+
+  <div class="controls">
+
+    <button id="cameraBtn">
+      🎥 Aktifkan Kamera
+    </button>
+
+    <label class="fileButton">
+      🎬 Pilih Video Galeri
+      <input
+        type="file"
+        id="videoInput"
+        accept="video/*">
+    </label>
+
+    <button id="showOverlay">
+      👁️ Tampilkan Overlay
+    </button>
+
+    <button id="hideOverlay">
+      ❌ Sembunyikan Overlay
+    </button>
+
+  </div>
+
+  <p id="status">
+    Status: Kamera belum aktif
+  </p>
+
+  <script src="script.js" defer></script>
+
+</body>
+</html>
