@@ -9,6 +9,7 @@ const hideOverlay = document.getElementById("hideOverlay");
 
 const statusText = document.getElementById("status");
 
+// Tombol kontrol
 const moveUp = document.getElementById("moveUp");
 const moveDown = document.getElementById("moveDown");
 const moveLeft = document.getElementById("moveLeft");
@@ -19,17 +20,22 @@ const sizeDown = document.getElementById("sizeDown");
 
 let cameraStream = null;
 
-// Posisi dan ukuran overlay
+// Posisi overlay
 let posX = 0;
 let posY = 0;
+
+// Ukuran overlay dalam persen
 let overlayWidth = 45;
 
-// =============================
-// KAMERA & MICROPHONE
-// =============================
 
-cameraBtn.addEventListener("click", async () => {
+// ================================
+// KAMERA
+// ================================
+
+cameraBtn.addEventListener("click", async function () {
+
   try {
+
     cameraStream = await navigator.mediaDevices.getUserMedia({
       video: {
         facingMode: "user"
@@ -43,18 +49,23 @@ cameraBtn.addEventListener("click", async () => {
       "Status: Kamera & microphone aktif";
 
   } catch (error) {
+
     console.error(error);
 
     statusText.textContent =
       "Status: Kamera/microphone tidak diizinkan";
+
   }
+
 });
 
-// =============================
-// PILIH VIDEO GALERI
-// =============================
 
-videoInput.addEventListener("change", () => {
+// ================================
+// PILIH VIDEO GALERI
+// ================================
+
+videoInput.addEventListener("change", function () {
+
   const file = videoInput.files[0];
 
   if (!file) {
@@ -70,79 +81,140 @@ videoInput.addEventListener("change", () => {
   overlayVideo.play();
 
   statusText.textContent =
-    "Status: Video galeri siap digunakan sebagai overlay";
+    "Status: Video galeri aktif";
+
 });
 
-// =============================
-// TAMPILKAN OVERLAY
-// =============================
 
-showOverlay.addEventListener("click", () => {
+// ================================
+// TAMPILKAN VIDEO
+// ================================
+
+showOverlay.addEventListener("click", function () {
+
   if (!overlayVideo.src) {
+
     alert("Pilih video dari galeri terlebih dahulu.");
+
     return;
+
   }
 
   overlayVideo.classList.remove("hidden");
+
   overlayVideo.play();
+
 });
 
-// =============================
-// SEMBUNYIKAN OVERLAY
-// =============================
 
-hideOverlay.addEventListener("click", () => {
+// ================================
+// SEMBUNYIKAN VIDEO
+// ================================
+
+hideOverlay.addEventListener("click", function () {
+
   overlayVideo.pause();
+
   overlayVideo.classList.add("hidden");
+
 });
 
-// =============================
-// FUNGSI POSISI
-// =============================
+
+// ================================
+// UPDATE POSISI
+// ================================
 
 function updatePosition() {
+
   overlayVideo.style.transform =
-    `translate(${posX}px, ${posY}px)`;
+    "translate(" + posX + "px, " + posY + "px)";
+
 }
 
-moveUp.addEventListener("click", () => {
-  posY -= 10;
+
+// ================================
+// GESER KE ATAS
+// ================================
+
+moveUp.addEventListener("click", function () {
+
+  posY = posY - 10;
+
   updatePosition();
+
 });
 
-moveDown.addEventListener("click", () => {
-  posY += 10;
+
+// ================================
+// GESER KE BAWAH
+// ================================
+
+moveDown.addEventListener("click", function () {
+
+  posY = posY + 10;
+
   updatePosition();
+
 });
 
-moveLeft.addEventListener("click", () => {
-  posX -= 10;
+
+// ================================
+// GESER KE KIRI
+// ================================
+
+moveLeft.addEventListener("click", function () {
+
+  posX = posX - 10;
+
   updatePosition();
+
 });
 
-moveRight.addEventListener("click", () => {
-  posX += 10;
+
+// ================================
+// GESER KE KANAN
+// ================================
+
+moveRight.addEventListener("click", function () {
+
+  posX = posX + 10;
+
   updatePosition();
+
 });
 
-// =============================
-// FUNGSI UKURAN
-// =============================
 
-function updateSize() {
-  overlayVideo.style.width = overlayWidth + "%";
-}
+// ================================
+// PERBESAR
+// ================================
 
-sizeUp.addEventListener("click", () => {
+sizeUp.addEventListener("click", function () {
+
   if (overlayWidth < 90) {
-    overlayWidth += 5;
-    updateSize();
+
+    overlayWidth = overlayWidth + 5;
+
+    overlayVideo.style.width =
+      overlayWidth + "%";
+
   }
+
 });
 
-sizeDown.addEventListener("click", () => {
+
+// ================================
+// PERKECIL
+// ================================
+
+sizeDown.addEventListener("click", function () {
+
   if (overlayWidth > 15) {
-    overlayWidth -= 5;
-    updateSize();
+
+    overlayWidth = overlayWidth - 5;
+
+    overlayVideo.style.width =
+      overlayWidth + "%";
+
   }
+
 });
